@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DoublyLinkedList
@@ -14,6 +15,8 @@ namespace DoublyLinkedList
             {
                 listRandom.Add(data);
             }
+            listRandom.Add("INEOS is Performance Partner to New Zealand Rugby. We think it’s a perfect match. The gutsy, innovative spirit of our Grenadier team combined with the tough, relentless attitude of the some of the world’s best rugby teams. We’re sure there’s plenty we can learn from all seven Teams in Black – the All Blacks, Black Ferns, All Blacks Sevens, Black Ferns Sevens, Māori All Blacks, Heartland XV and All Blacks Under-20./n/rThe Teams in Black join the other teams on our roster bringing together some of the best minds and talent in sport to tackle sports greatest challenges, including Mercedes - AMG Petronas F1 Team, INEOS Grenadiers cycling team, America’s Cup Challenger of Record INEOS Britannia, Eliud Kipchoge and the NN Running Team, OGC Nice and FC Lausanne - Sport.");
+            listRandom.Add("`  !");
 
             listRandom.MarkAllRandom();
 
@@ -32,7 +35,6 @@ namespace DoublyLinkedList
             }
 
             newListRandom.PrintData();
-
         }
     }
     class ListNode
@@ -71,7 +73,6 @@ namespace DoublyLinkedList
         public void MarkAllRandom()
         {
             var node = Head;
-
             for (int i = 0; i < Count; i++)
             {
                 node.Random = GetListNodeById(new Random().Next(Count));
@@ -82,7 +83,6 @@ namespace DoublyLinkedList
         public ListNode GetListNodeById(int id)
         {
             var node = Head;
-
             for (int i = 0; i < id; i++)
             {
                 node = node.Next;
@@ -97,7 +97,9 @@ namespace DoublyLinkedList
 
             for (var i = 0; i < Count; i++)
             {
-                Console.WriteLine(i + " " + node.Data + " " + GetNodeId(node.Random));
+                Console.WriteLine(i);
+                Console.WriteLine(GetNodeId(node.Random));
+                Console.WriteLine(node.Data);
 
                 if (Tail == node)
                     return;
@@ -125,43 +127,62 @@ namespace DoublyLinkedList
 
         public void Serialize(StreamWriter sw)
         {
-            var node = Head;
-
+            var nodesDictionary = new Dictionary<ListNode, int>();
             sw.WriteLine(Count);
 
+            //Заполнение словоря для рандома
+            var node = Head;
             for (var i = 0; i < Count; i++)
             {
-                sw.WriteLine(i + " " + node.Data + " " + GetNodeId(node.Random));
-
-                if (Tail == node)
-                    return;
-
+                nodesDictionary.Add(node, i);
+                node = node.Next;
+            }
+            //Заполнение файла
+            node = Head;
+            for (var i = 0; i < Count; i++)
+            {
+                sw.WriteLine(i);
+                sw.WriteLine(nodesDictionary[node.Random]);
+                sw.WriteLine(node.Data);
                 node = node.Next;
             }
         }
-
         public void Deserialize(StreamReader sr)
         {
+            var nodesDictionary = new Dictionary<string, ListNode>();
             var count = int.Parse(sr.ReadLine());
-            string[][] datas = new string[count][];
+            var randomIds = new string[count];
 
+            //Чтение из файла и создание списка
             for (var i = 0; i < count; i++)
             {
-                datas[i] = sr.ReadLine().Split(' ');
+                var id = sr.ReadLine();
+                randomIds[i] = sr.ReadLine();
+                nodesDictionary[id] = new ListNode() { Data = sr.ReadLine() };
+
+                Count++;
+                
+                if (Count > 1)
+                {
+                    Tail.Next = nodesDictionary[id];
+                    nodesDictionary[id].Previous = Tail;
+                }
+                else
+                {
+                    Head = nodesDictionary[id];
+                }
+
+                Tail = nodesDictionary[id];
             }
 
-            foreach (var data in datas)
-            {
-                this.Add(data[1]);
-            }
-
+            //Проставление ссылок на поле Random
             var node = Head;
-
-            foreach (var data in datas)
+            for (int i = 0; i < Count; i++)
             {
-                node.Random = GetListNodeById(int.Parse(data[2]));
+                node.Random = nodesDictionary[randomIds[i]];
                 node = node.Next;
             }
         }
+
     }
 }
