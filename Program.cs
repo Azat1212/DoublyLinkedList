@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 
 namespace DoublyLinkedList
 {
@@ -8,59 +7,20 @@ namespace DoublyLinkedList
     {
         static void Main(string[] args)
         {
-            //// Get the directories currently on the C drive.
-            //DirectoryInfo[] cDirs = new DirectoryInfo(@"c:\").GetDirectories();
-
-            //// Write each directory name to a file.
-            //using (StreamWriter sw = new StreamWriter("CDriveDirs.txt"))
-            //{
-            //    foreach (DirectoryInfo dir in cDirs)
-            //    {
-            //        sw.WriteLine(dir.Name);
-            //    }
-            //}
-
-            //// Read and show each line from the file.
-            //string line = "";
-            //using (StreamReader sr = new StreamReader("CDriveDirs.txt"))
-            //{
-            //    while ((line = sr.ReadLine()) != null)
-            //    {
-            //        Console.WriteLine(line);
-            //    }
-            //}
-
-            //listRandom.Add("50");
-
-            //listRandom.Add("51");
-
-            //listRandom.Add("52");
-            //listRandom.Add("53");
-            //listRandom.Add("54");
-            //listRandom.Add("55");
-            //listRandom.Add("56");
-            //listRandom.Add("57");
-            //listRandom.Add("58");
-            //listRandom.Add("59");
-
             var listRandom = new ListRandom();
 
             var datas = "60 61 62 63 64 65 66 67 68 69".Split(' ');
-            foreach(var data in datas)
+            foreach (var data in datas)
             {
                 listRandom.Add(data);
             }
 
             listRandom.MarkAllRandom();
-            //listRandom.PrintData(listRandom.Head);
-
-
 
             string fileName = "ListRandom.txt";
-            //fileName = Path.Combine(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory + @"\..\..\"), fileName);
 
             using (StreamWriter sw = new StreamWriter(fileName))
-            { 
+            {
                 listRandom.Serialize(sw);
             }
 
@@ -119,7 +79,7 @@ namespace DoublyLinkedList
             }
         }
 
-        public void FillRandomById(int id)
+        public ListNode GetListNodeById(int id)
         {
             var node = Head;
 
@@ -128,37 +88,9 @@ namespace DoublyLinkedList
                 node = node.Next;
             }
 
-            node.Random = GetListNodeById(id);
-        }
-
-        public ListNode GetListNodeById(int id)
-        {
-            var node = Head;
-
-            for (int i = 0; i < Count; i++)
-            {
-                if (id == i)
-                {
-                    break; 
-                }                
-                node = node.Next;
-            }
             return node;
         }
 
-        //public void PrintData(ListNode node)
-        //{
-        //    if (node == null)
-        //        node = Head;
-
-        //    Console.WriteLine(node.Data);
-
-        //    if (Tail == node)
-        //        return;
-
-        //    PrintData(node.Next);
-        //}
-        
         public void PrintData()
         {
             var node = Head;
@@ -181,7 +113,6 @@ namespace DoublyLinkedList
 
             for (var i = 0; i < Count; i++)
             {
-                
                 if (tmpNode == node)
                 {
                     count = i;
@@ -190,7 +121,7 @@ namespace DoublyLinkedList
                 tmpNode = tmpNode.Next;
             }
             return count;
-        } 
+        }
 
         public void Serialize(StreamWriter sw)
         {
@@ -226,13 +157,11 @@ namespace DoublyLinkedList
 
             var node = Head;
 
-            foreach(var data in datas)
+            foreach (var data in datas)
             {
                 node.Random = GetListNodeById(int.Parse(data[2]));
                 node = node.Next;
             }
         }
     }
-
-
 }
