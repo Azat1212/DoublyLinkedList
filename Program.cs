@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 
 namespace DoublyLinkedList
 {
@@ -15,8 +17,8 @@ namespace DoublyLinkedList
             {
                 listRandom.Add(data);
             }
-            listRandom.Add("INEOS is Performance Partner to New Zealand Rugby. We think it’s a perfect match. The gutsy, innovative spirit of our Grenadier team combined with the tough, relentless attitude of the some of the world’s best rugby teams. We’re sure there’s plenty we can learn from all seven Teams in Black – the All Blacks, Black Ferns, All Blacks Sevens, Black Ferns Sevens, Māori All Blacks, Heartland XV and All Blacks Under-20./n/rThe Teams in Black join the other teams on our roster bringing together some of the best minds and talent in sport to tackle sports greatest challenges, including Mercedes - AMG Petronas F1 Team, INEOS Grenadiers cycling team, America’s Cup Challenger of Record INEOS Britannia, Eliud Kipchoge and the NN Running Team, OGC Nice and FC Lausanne - Sport.");
-            listRandom.Add("`  !");
+
+            listRandom.Add("12345\n67890");
 
             listRandom.MarkAllRandom();
 
@@ -29,7 +31,7 @@ namespace DoublyLinkedList
 
             var newListRandom = new ListRandom();
 
-            using (StreamReader sr = new StreamReader(fileName))
+            using (var sr = new StreamReader(fileName))
             {
                 newListRandom.Deserialize(sr);
             }
@@ -143,7 +145,7 @@ namespace DoublyLinkedList
             {
                 sw.WriteLine(i);
                 sw.WriteLine(nodesDictionary[node.Random]);
-                sw.WriteLine(node.Data);
+                sw.WriteLine(Regex.Escape(node.Data));
                 node = node.Next;
             }
         }
