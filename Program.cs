@@ -18,7 +18,7 @@ namespace DoublyLinkedList
                 listRandom.Add(data);
             }
 
-            listRandom.Add("12345\n67890");
+            listRandom.Add(@"12345\n\t\r&%$#67890");
 
             listRandom.MarkAllRandom();
 
@@ -145,7 +145,7 @@ namespace DoublyLinkedList
             {
                 sw.WriteLine(i);
                 sw.WriteLine(nodesDictionary[node.Random]);
-                sw.WriteLine(Regex.Escape(node.Data));
+                sw.WriteLine(String.Format(@"{0}", node.Data));
                 node = node.Next;
             }
         }
@@ -160,7 +160,7 @@ namespace DoublyLinkedList
             {
                 var id = sr.ReadLine();
                 randomIds[i] = sr.ReadLine();
-                nodesDictionary[id] = new ListNode() { Data = sr.ReadLine() };
+                nodesDictionary[id] = new ListNode() { Data = sr.ReadLine()};
 
                 Count++;
                 
@@ -185,6 +185,5 @@ namespace DoublyLinkedList
                 node = node.Next;
             }
         }
-
     }
 }
