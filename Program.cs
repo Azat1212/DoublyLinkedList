@@ -18,8 +18,6 @@ namespace DoublyLinkedList
                 listRandom.Add(data);
             }
 
-            listRandom.Add(@"12345\n\t\r&%$#67890");
-
             listRandom.MarkAllRandom();
 
             string fileName = "ListRandom.txt";
