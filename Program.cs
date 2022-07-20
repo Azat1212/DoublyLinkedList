@@ -145,7 +145,7 @@ namespace DoublyLinkedList
             {
                 sw.WriteLine(i);
                 sw.WriteLine(nodesDictionary[node.Random]);
-                sw.WriteLine(String.Format(@"{0}", node.Data));
+                sw.WriteLine(Regex.Escape(node.Data));
                 node = node.Next;
             }
         }
